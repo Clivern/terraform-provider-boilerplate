@@ -1,7 +1,7 @@
 
 provider "example" {
   api_key = "key"
-  api_url = "http://requestbin.net/r/1jdf7yi1"
+  api_url = "http://127.0.0.1:8080"
 }
 
 resource "example_server" "web" {

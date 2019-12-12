@@ -5,28 +5,29 @@
 package example
 
 import (
-    "log"
-    "github.com/clivern/terraform-provider-example/sdk"
+	"log"
+
+	"github.com/clivern/terraform-provider-example/sdk"
 )
 
-type ExampleClient struct{
+type ExampleClient struct {
 	Client *sdk.Client
 }
 
 type Config struct {
-    ApiKey string
-    ApiUrl string
+	ApiKey string
+	ApiUrl string
 }
 
 func (c *Config) Client() (*ExampleClient, error) {
-    cli := &sdk.Client{
-        ApiKey: c.ApiKey,
-        ApiUrl: c.ApiUrl,
-    }
+	cli := &sdk.Client{
+		ApiKey: c.ApiKey,
+		ApiUrl: c.ApiUrl,
+	}
 
-    cli.Init()
+	cli.Init()
 
-    log.Printf("[INFO] upstream client configured")
+	log.Printf("[INFO] upstream client configured")
 
-    return &ExampleClient{Client: cli}, nil
+	return &ExampleClient{Client: cli}, nil
 }

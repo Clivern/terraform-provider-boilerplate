@@ -17,7 +17,6 @@ import (
 type HTTP struct {
 }
 
-
 // Get http call
 func (h *HTTP) Get(endpoint string, parameters map[string]string, headers map[string]string) (*http.Response, error) {
 

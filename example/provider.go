@@ -6,11 +6,12 @@ package example
 
 import (
 	"log"
+
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 func Provider() *schema.Provider {
-    return &schema.Provider{
+	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"api_key": {
 				Type:        schema.TypeString,
@@ -23,11 +24,11 @@ func Provider() *schema.Provider {
 				Default:  "api.example.com",
 			},
 		},
-        ResourcesMap: map[string]*schema.Resource{
-        	"example_server": resourceExampleServer(),
-        },
-        ConfigureFunc: providerConfigure,
-    }
+		ResourcesMap: map[string]*schema.Resource{
+			"example_server": resourceExampleServer(),
+		},
+		ConfigureFunc: providerConfigure,
+	}
 }
 
 func providerConfigure(data *schema.ResourceData) (interface{}, error) {

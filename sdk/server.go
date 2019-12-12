@@ -9,11 +9,11 @@ import (
 )
 
 type Server struct {
-	Id  int `json:"id"`
-	Image string `json:"image"`
-	Name string `json:"name"`
-	Size string `json:"size"`
-	Region string`json:"region"`
+	Id     int    `json:"id"`
+	Image  string `json:"image"`
+	Name   string `json:"name"`
+	Size   string `json:"size"`
+	Region string `json:"region"`
 }
 
 // LoadFromJSON update object from json

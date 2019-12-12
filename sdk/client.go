@@ -5,21 +5,21 @@
 package sdk
 
 import (
-	"net/http"
 	"fmt"
+	"net/http"
 )
 
-type Client struct{
-	ApiKey string
-    ApiUrl string
-    HttpClient *HTTP
+type Client struct {
+	ApiKey     string
+	ApiUrl     string
+	HttpClient *HTTP
 }
 
-func(c *Client) Init() {
+func (c *Client) Init() {
 	c.HttpClient = &HTTP{}
 }
 
-func(c *Client) CreateServer(server *Server)(*Server, error){
+func (c *Client) CreateServer(server *Server) (*Server, error) {
 	data, err := server.ConvertToJSON()
 
 	if err != nil {
@@ -27,10 +27,10 @@ func(c *Client) CreateServer(server *Server)(*Server, error){
 	}
 
 	response, err := c.HttpClient.Post(
-	    fmt.Sprintf("%s/server", c.ApiUrl),
-	   	data,
-	    map[string]string{},
-	    map[string]string{"X-AUTH-TOKEN": c.ApiKey, "Content-Type": "application/json"},
+		fmt.Sprintf("%s/server", c.ApiUrl),
+		data,
+		map[string]string{},
+		map[string]string{"X-AUTH-TOKEN": c.ApiKey, "Content-Type": "application/json"},
 	)
 
 	if err != nil {
@@ -54,14 +54,14 @@ func(c *Client) CreateServer(server *Server)(*Server, error){
 	return server, nil
 }
 
-func(c *Client) GetServer(id int)(*Server, error){
+func (c *Client) GetServer(id int) (*Server, error) {
 
 	server := &Server{}
 
 	response, err := c.HttpClient.Get(
-	    fmt.Sprintf("%s/server/%d", c.ApiUrl, id),
-	    map[string]string{},
-	    map[string]string{"X-AUTH-TOKEN": c.ApiKey, "Content-Type": "application/json"},
+		fmt.Sprintf("%s/server/%d", c.ApiUrl, id),
+		map[string]string{},
+		map[string]string{"X-AUTH-TOKEN": c.ApiKey, "Content-Type": "application/json"},
 	)
 
 	statusCode := c.HttpClient.GetStatusCode(response)
@@ -81,12 +81,12 @@ func(c *Client) GetServer(id int)(*Server, error){
 	return server, nil
 }
 
-func(c *Client) DeleteServer(id int)(bool, error){
+func (c *Client) DeleteServer(id int) (bool, error) {
 
 	response, err := c.HttpClient.Delete(
-	    fmt.Sprintf("%s/server/%d", c.ApiUrl, id),
-	    map[string]string{},
-	    map[string]string{"X-AUTH-TOKEN": c.ApiKey, "Content-Type": "application/json"},
+		fmt.Sprintf("%s/server/%d", c.ApiUrl, id),
+		map[string]string{},
+		map[string]string{"X-AUTH-TOKEN": c.ApiKey, "Content-Type": "application/json"},
 	)
 
 	if err != nil {
@@ -102,7 +102,7 @@ func(c *Client) DeleteServer(id int)(bool, error){
 	return true, nil
 }
 
-func(c *Client) UpdateServer(server *Server)(*Server, error){
+func (c *Client) UpdateServer(server *Server) (*Server, error) {
 	data, err := server.ConvertToJSON()
 
 	if err != nil {
@@ -110,10 +110,10 @@ func(c *Client) UpdateServer(server *Server)(*Server, error){
 	}
 
 	response, err := c.HttpClient.Put(
-	    fmt.Sprintf("%s/server/%d", c.ApiUrl, server.Id),
-	   	data,
-	    map[string]string{},
-	    map[string]string{"X-AUTH-TOKEN": c.ApiKey, "Content-Type": "application/json"},
+		fmt.Sprintf("%s/server/%d", c.ApiUrl, server.Id),
+		data,
+		map[string]string{},
+		map[string]string{"X-AUTH-TOKEN": c.ApiKey, "Content-Type": "application/json"},
 	)
 
 	statusCode := c.HttpClient.GetStatusCode(response)

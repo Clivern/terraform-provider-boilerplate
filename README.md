@@ -1,7 +1,6 @@
 <p align="center">
-    <img alt="terraform-provider-example Logo" src="https://cdn.rawgit.com/hashicorp/terraform-website/master/content/source/assets/images/logo-hashicorp.svg" width="300" />
-    <br/>
-    <p align="center">Terraform Provider Example.</p>
+    <img alt="terraform-provider-example Logo" src="https://www.terraform.io/assets/images/og-image-8b3e4f7d.png" width="150" />
+    <h3 align="center">Terraform Provider Example.</h3>
     <p align="center">
         <a href="https://godoc.org/github.com/Clivern/terraform-provider-example"><img src="https://godoc.org/github.com/Clivern/terraform-provider-example?status.svg"></a>
         <a href="https://travis-ci.org/Clivern/terraform-provider-example"><img src="https://travis-ci.org/Clivern/terraform-provider-example.svg?branch=master"></a>

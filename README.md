@@ -223,6 +223,12 @@ $ terraform apply
 ```
 
 
+## General Rules
+
+- Terraform should always consume an independent client library or sdk which implements the core logic for communicating with the upstream. You should consider moving the `/sdk` to be a separate project.
+- Data sources are a special subset of resources which are read-only. They are resolved earlier than regular resources and can be used as part of Terraform's interpolation.
+
+
 ## Versioning
 
 For transparency into our release cycle and in striving to maintain backward compatibility, terraform-provider-example is maintained under the [Semantic Versioning guidelines](https://semver.org/) and release process is predictable and business-friendly.

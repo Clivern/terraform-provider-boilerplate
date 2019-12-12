@@ -13,10 +13,195 @@
 
 ## Documentation
 
-First we need to create a simple web service.
+First we need to create a simple web service to do a CRUD operations.
 
 ```golang
-#
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"os"
+	"encoding/json"
+	"io/ioutil"
+
+	"github.com/gin-gonic/gin"
+)
+
+type Server struct {
+	Id     int    `json:"id"`
+	Image  string `json:"image"`
+	Name   string `json:"name"`
+	Size   string `json:"size"`
+	Region string `json:"region"`
+}
+
+// LoadFromJSON update object from json
+func (s *Server) LoadFromJSON(data []byte) (bool, error) {
+	err := json.Unmarshal(data, &s)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+// ConvertToJSON convert object to json
+func (s *Server) ConvertToJSON() (string, error) {
+	data, err := json.Marshal(&s)
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
+func Store(file, data string)(bool, error){
+    f, err := os.Create(file)
+    if err != nil {
+        return false, err
+    }
+    _, err = f.WriteString(data)
+    if err != nil {
+        f.Close()
+        return false, err
+    }
+    err = f.Close()
+    if err != nil {
+        return false, err
+    }
+    return true, nil
+}
+
+func Retrieve(file string) string{
+    b, err := ioutil.ReadFile(file) // just pass the file name
+
+    if err != nil {
+        return ""
+    }
+
+    return string(b)
+}
+
+func main() {
+
+	gin.DisableConsoleColor()
+	gin.DefaultWriter = os.Stdout
+
+	r := gin.Default()
+
+	r.GET("/favicon.ico", func(c *gin.Context) {
+		c.String(http.StatusNoContent, "")
+	})
+
+	r.GET("/server/:id", func(c *gin.Context) {
+		data := Retrieve("db.txt")
+
+		if data == ""{
+			c.JSON(http.StatusNotFound, gin.H{
+				"status": "error",
+				"error":  "Server not found",
+			})
+			return
+		}
+
+		server := &Server{}
+		server.LoadFromJSON([]byte(data))
+
+		c.JSON(http.StatusOK, gin.H{
+			"id": server.Id,
+			"image": server.Image,
+			"name": server.Name,
+			"size": server.Size,
+			"region": server.Region,
+		})
+	})
+
+	r.POST("/server", func(c *gin.Context) {
+		rawBody, err := c.GetRawData()
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"status": "error",
+				"error":  "Invalid request",
+			})
+			return
+		}
+
+		server := &Server{}
+		server.LoadFromJSON([]byte(rawBody))
+
+		server.Id = 1
+
+		data, _ := server.ConvertToJSON()
+
+		ok, err := Store("db.txt", data)
+
+		if !ok || err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": "error",
+				"error":  "Internal Server Error",
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"id": server.Id,
+			"image": server.Image,
+			"name": server.Name,
+			"size": server.Size,
+			"region": server.Region,
+		})
+	})
+
+	r.PUT("/server/:id", func(c *gin.Context) {
+		rawBody, err := c.GetRawData()
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"status": "error",
+				"error":  "Invalid request",
+			})
+			return
+		}
+
+		server := &Server{}
+		server.LoadFromJSON([]byte(rawBody))
+
+		server.Id = 1
+
+		data, _ := server.ConvertToJSON()
+
+		ok, err := Store("db.txt", data)
+
+		if !ok || err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": "error",
+				"error":  "Internal Server Error",
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"id": server.Id,
+			"image": server.Image,
+			"name": server.Name,
+			"size": server.Size,
+			"region": server.Region,
+		})
+	})
+
+	r.DELETE("/server/:id", func(c *gin.Context) {
+		Store("db.txt", "")
+		c.Status(http.StatusNoContent)
+	})
+
+	r.Run(fmt.Sprintf(":%d", 8080))
+}
+```
+
+Run this service on the background.
+
+```bash
+$ go run main.go
 ```
 
 Then we can use our terraform provider to make changes to the web service resources.

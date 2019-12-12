@@ -206,7 +206,7 @@ $ go run main.go
 
 Then we can use our terraform provider to make changes to the web service resources.
 
-```golang
+```bash
 $ git clone https://github.com/Clivern/terraform-provider-example.git
 
 # Build the provider

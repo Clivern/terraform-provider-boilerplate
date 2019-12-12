@@ -10,12 +10,31 @@
     </p>
 </p>
 
+
 ## Documentation
 
-### Installation:
+First we need to create a simple web service.
 
 ```golang
 #
+```
+
+Then we can use our terraform provider to make changes to the web service resources.
+
+```golang
+$ git clone https://github.com/Clivern/terraform-provider-example.git
+
+# Build the provider
+$ go build -o terraform-provider-example
+
+# Initialize a working directory containing Terraform configuration files
+$ terraform init
+
+# Create an execution plan.
+$ terraform plan
+
+# Apply the changes required to reach the desired state of the configuration
+$ terraform apply
 ```
 
 

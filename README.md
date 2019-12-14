@@ -4,7 +4,7 @@
     <p align="center">
         <a href="https://godoc.org/github.com/Clivern/terraform-provider-boilerplate"><img src="https://godoc.org/github.com/Clivern/terraform-provider-boilerplate?status.svg"></a>
         <a href="https://travis-ci.org/Clivern/terraform-provider-boilerplate"><img src="https://travis-ci.org/Clivern/terraform-provider-boilerplate.svg?branch=master"></a>
-        <a href="https://github.com/Clivern/terraform-provider-boilerplate/releases"><img src="https://img.shields.io/badge/Version-0.0.1-red.svg"></a>
+        <a href="https://github.com/Clivern/terraform-provider-boilerplate/releases"><img src="https://img.shields.io/badge/Version-0.1.0-red.svg"></a>
         <a href="https://goreportcard.com/report/github.com/Clivern/terraform-provider-boilerplate"><img src="https://goreportcard.com/badge/github.com/Clivern/terraform-provider-boilerplate?v=0.0.1"></a>
         <a href="https://github.com/Clivern/terraform-provider-boilerplate/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
     </p>

@@ -2,24 +2,25 @@
 // Use of this source code is governed by the MIT
 // license that can be found in the LICENSE file.
 
-package example
+package boilerplate
 
 import (
 	"log"
 	"strconv"
 	"strings"
 
-	"github.com/clivern/terraform-provider-example/sdk"
+	"github.com/clivern/terraform-provider-boilerplate/sdk"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
-func resourceExampleServer() *schema.Resource {
+// resourceBoilerplateServer defines a server schema
+func resourceBoilerplateServer() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceExampleServerCreate,
-		Read:   resourceExampleServerRead,
-		Update: resourceExampleServerUpdate,
-		Delete: resourceExampleServerDelete,
+		Create: resourceBoilerplateServerCreate,
+		Read:   resourceBoilerplateServerRead,
+		Update: resourceBoilerplateServerUpdate,
+		Delete: resourceBoilerplateServerDelete,
 		Schema: map[string]*schema.Schema{
 			"image": {
 				Type:         schema.TypeString,
@@ -53,8 +54,9 @@ func resourceExampleServer() *schema.Resource {
 	}
 }
 
-func resourceExampleServerCreate(d *schema.ResourceData, m interface{}) error {
-	client := m.(*ExampleClient).Client
+// resourceBoilerplateServerCreate creates a server
+func resourceBoilerplateServerCreate(d *schema.ResourceData, m interface{}) error {
+	client := m.(*Client).Client
 
 	server, err := client.CreateServer(&sdk.Server{
 		Image:  d.Get("image").(string),
@@ -75,11 +77,12 @@ func resourceExampleServerCreate(d *schema.ResourceData, m interface{}) error {
 	d.Set("image", server.Image)
 	d.Set("region", server.Region)
 
-	return resourceExampleServerRead(d, m)
+	return resourceBoilerplateServerRead(d, m)
 }
 
-func resourceExampleServerRead(d *schema.ResourceData, m interface{}) error {
-	client := m.(*ExampleClient).Client
+// resourceBoilerplateServerRead retrieves a server
+func resourceBoilerplateServerRead(d *schema.ResourceData, m interface{}) error {
+	client := m.(*Client).Client
 
 	id, err := strconv.Atoi(d.Id())
 
@@ -104,8 +107,9 @@ func resourceExampleServerRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceExampleServerUpdate(d *schema.ResourceData, m interface{}) error {
-	client := m.(*ExampleClient).Client
+// resourceBoilerplateServerUpdate updates a server
+func resourceBoilerplateServerUpdate(d *schema.ResourceData, m interface{}) error {
+	client := m.(*Client).Client
 
 	id, err := strconv.Atoi(d.Id())
 
@@ -113,7 +117,7 @@ func resourceExampleServerUpdate(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	server, err := client.CreateServer(&sdk.Server{
+	server, err := client.UpdateServer(&sdk.Server{
 		Id:     id,
 		Image:  d.Get("image").(string),
 		Name:   d.Get("name").(string),
@@ -121,7 +125,7 @@ func resourceExampleServerUpdate(d *schema.ResourceData, m interface{}) error {
 		Region: d.Get("region").(string),
 	})
 
-	log.Printf("[INFO] Creating Server")
+	log.Printf("[INFO] Updating Server")
 
 	if err != nil {
 		return err
@@ -133,11 +137,12 @@ func resourceExampleServerUpdate(d *schema.ResourceData, m interface{}) error {
 	d.Set("image", server.Image)
 	d.Set("region", server.Region)
 
-	return resourceExampleServerRead(d, m)
+	return resourceBoilerplateServerRead(d, m)
 }
 
-func resourceExampleServerDelete(d *schema.ResourceData, m interface{}) error {
-	client := m.(*ExampleClient).Client
+// resourceBoilerplateServerDelete deletes a server
+func resourceBoilerplateServerDelete(d *schema.ResourceData, m interface{}) error {
+	client := m.(*Client).Client
 
 	id, err := strconv.Atoi(d.Id())
 

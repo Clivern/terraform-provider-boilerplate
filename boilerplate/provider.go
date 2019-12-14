@@ -2,7 +2,7 @@
 // Use of this source code is governed by the MIT
 // license that can be found in the LICENSE file.
 
-package example
+package boilerplate
 
 import (
 	"log"
@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
+// Provider returns instance of the provider
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
@@ -21,22 +22,23 @@ func Provider() *schema.Provider {
 			"api_url": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Default:  "api.example.com",
+				Default:  "api.boilerplate.com",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"example_server": resourceExampleServer(),
+			"boilerplate_server": resourceBoilerplateServer(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
 }
 
+// providerConfigure configures the provider
 func providerConfigure(data *schema.ResourceData) (interface{}, error) {
-	log.Println("[INFO] Initializing client")
+	log.Println("[INFO] Initializing Client")
 
 	config := Config{
-		ApiKey: data.Get("api_key").(string),
-		ApiUrl: data.Get("api_url").(string),
+		APIKey: data.Get("api_key").(string),
+		APIURL: data.Get("api_url").(string),
 	}
 
 	return config.Client()

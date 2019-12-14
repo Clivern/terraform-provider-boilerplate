@@ -10,15 +10,16 @@ import (
 )
 
 type Client struct {
-	ApiKey     string
-	ApiUrl     string
-	HttpClient *HTTP
+	APIKey     string
+	APIURL     string
+	HTTPClient *HTTP
 }
 
 func (c *Client) Init() {
-	c.HttpClient = &HTTP{}
+	c.HTTPClient = &HTTP{}
 }
 
+// CreateServer creates a server
 func (c *Client) CreateServer(server *Server) (*Server, error) {
 	data, err := server.ConvertToJSON()
 
@@ -26,24 +27,24 @@ func (c *Client) CreateServer(server *Server) (*Server, error) {
 		return nil, err
 	}
 
-	response, err := c.HttpClient.Post(
-		fmt.Sprintf("%s/server", c.ApiUrl),
+	response, err := c.HTTPClient.Post(
+		fmt.Sprintf("%s/server", c.APIURL),
 		data,
 		map[string]string{},
-		map[string]string{"X-AUTH-TOKEN": c.ApiKey, "Content-Type": "application/json"},
+		map[string]string{"X-AUTH-TOKEN": c.APIKey, "Content-Type": "application/json"},
 	)
 
 	if err != nil {
 		return nil, err
 	}
 
-	statusCode := c.HttpClient.GetStatusCode(response)
+	statusCode := c.HTTPClient.GetStatusCode(response)
 
 	if statusCode != http.StatusOK && statusCode != http.StatusCreated && statusCode != http.StatusAccepted {
 		return nil, fmt.Errorf("Invalid status code %d", statusCode)
 	}
 
-	responseBody, err := c.HttpClient.ToString(response)
+	responseBody, err := c.HTTPClient.ToString(response)
 
 	if err != nil {
 		return nil, err
@@ -54,23 +55,24 @@ func (c *Client) CreateServer(server *Server) (*Server, error) {
 	return server, nil
 }
 
+// GetServer retrieves a server
 func (c *Client) GetServer(id int) (*Server, error) {
 
 	server := &Server{}
 
-	response, err := c.HttpClient.Get(
-		fmt.Sprintf("%s/server/%d", c.ApiUrl, id),
+	response, err := c.HTTPClient.Get(
+		fmt.Sprintf("%s/server/%d", c.APIURL, id),
 		map[string]string{},
-		map[string]string{"X-AUTH-TOKEN": c.ApiKey, "Content-Type": "application/json"},
+		map[string]string{"X-AUTH-TOKEN": c.APIKey, "Content-Type": "application/json"},
 	)
 
-	statusCode := c.HttpClient.GetStatusCode(response)
+	statusCode := c.HTTPClient.GetStatusCode(response)
 
 	if statusCode != http.StatusOK {
 		return nil, fmt.Errorf("Invalid status code %d", statusCode)
 	}
 
-	responseBody, err := c.HttpClient.ToString(response)
+	responseBody, err := c.HTTPClient.ToString(response)
 
 	if err != nil {
 		return nil, err
@@ -81,19 +83,20 @@ func (c *Client) GetServer(id int) (*Server, error) {
 	return server, nil
 }
 
+// DeleteServer deletes a server
 func (c *Client) DeleteServer(id int) (bool, error) {
 
-	response, err := c.HttpClient.Delete(
-		fmt.Sprintf("%s/server/%d", c.ApiUrl, id),
+	response, err := c.HTTPClient.Delete(
+		fmt.Sprintf("%s/server/%d", c.APIURL, id),
 		map[string]string{},
-		map[string]string{"X-AUTH-TOKEN": c.ApiKey, "Content-Type": "application/json"},
+		map[string]string{"X-AUTH-TOKEN": c.APIKey, "Content-Type": "application/json"},
 	)
 
 	if err != nil {
 		return false, err
 	}
 
-	statusCode := c.HttpClient.GetStatusCode(response)
+	statusCode := c.HTTPClient.GetStatusCode(response)
 
 	if statusCode != http.StatusNoContent {
 		return false, fmt.Errorf("Invalid status code %d", statusCode)
@@ -102,6 +105,7 @@ func (c *Client) DeleteServer(id int) (bool, error) {
 	return true, nil
 }
 
+// UpdateServer updates a server
 func (c *Client) UpdateServer(server *Server) (*Server, error) {
 	data, err := server.ConvertToJSON()
 
@@ -109,20 +113,20 @@ func (c *Client) UpdateServer(server *Server) (*Server, error) {
 		return nil, err
 	}
 
-	response, err := c.HttpClient.Put(
-		fmt.Sprintf("%s/server/%d", c.ApiUrl, server.Id),
+	response, err := c.HTTPClient.Put(
+		fmt.Sprintf("%s/server/%d", c.APIURL, server.Id),
 		data,
 		map[string]string{},
-		map[string]string{"X-AUTH-TOKEN": c.ApiKey, "Content-Type": "application/json"},
+		map[string]string{"X-AUTH-TOKEN": c.APIKey, "Content-Type": "application/json"},
 	)
 
-	statusCode := c.HttpClient.GetStatusCode(response)
+	statusCode := c.HTTPClient.GetStatusCode(response)
 
 	if statusCode != http.StatusOK {
 		return nil, fmt.Errorf("Invalid status code %d", statusCode)
 	}
 
-	responseBody, err := c.HttpClient.ToString(response)
+	responseBody, err := c.HTTPClient.ToString(response)
 
 	if err != nil {
 		return nil, err

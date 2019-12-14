@@ -1,12 +1,12 @@
 <p align="center">
-    <img alt="terraform-provider-example Logo" src="https://www.terraform.io/assets/images/og-image-8b3e4f7d.png" width="150" />
-    <h3 align="center">Terraform Provider Example.</h3>
+    <img alt="terraform-provider-boilerplate Logo" src="https://www.terraform.io/assets/images/og-image-8b3e4f7d.png" width="150" />
+    <h3 align="center">Terraform Provider Boilerplate.</h3>
     <p align="center">
-        <a href="https://godoc.org/github.com/Clivern/terraform-provider-example"><img src="https://godoc.org/github.com/Clivern/terraform-provider-example?status.svg"></a>
-        <a href="https://travis-ci.org/Clivern/terraform-provider-example"><img src="https://travis-ci.org/Clivern/terraform-provider-example.svg?branch=master"></a>
-        <a href="https://github.com/Clivern/terraform-provider-example/releases"><img src="https://img.shields.io/badge/Version-0.0.1-red.svg"></a>
-        <a href="https://goreportcard.com/report/github.com/Clivern/terraform-provider-example"><img src="https://goreportcard.com/badge/github.com/Clivern/terraform-provider-example?v=0.0.1"></a>
-        <a href="https://github.com/Clivern/terraform-provider-example/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
+        <a href="https://godoc.org/github.com/Clivern/terraform-provider-boilerplate"><img src="https://godoc.org/github.com/Clivern/terraform-provider-boilerplate?status.svg"></a>
+        <a href="https://travis-ci.org/Clivern/terraform-provider-boilerplate"><img src="https://travis-ci.org/Clivern/terraform-provider-boilerplate.svg?branch=master"></a>
+        <a href="https://github.com/Clivern/terraform-provider-boilerplate/releases"><img src="https://img.shields.io/badge/Version-0.0.1-red.svg"></a>
+        <a href="https://goreportcard.com/report/github.com/Clivern/terraform-provider-boilerplate"><img src="https://goreportcard.com/badge/github.com/Clivern/terraform-provider-boilerplate?v=0.0.1"></a>
+        <a href="https://github.com/Clivern/terraform-provider-boilerplate/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
     </p>
 </p>
 
@@ -207,10 +207,12 @@ $ go run main.go
 Then we can use our terraform provider to make changes to the web service resources.
 
 ```bash
-$ git clone https://github.com/Clivern/terraform-provider-example.git
+$ git clone https://github.com/Clivern/terraform-provider-boilerplate.git
 
 # Build the provider
-$ go build -o terraform-provider-example
+$ make ARGS="terraform-provider-boilerplate" build
+// OR
+$ go build -o terraform-provider-boilerplate
 
 # Initialize a working directory containing Terraform configuration files
 $ terraform init
@@ -225,25 +227,25 @@ $ terraform apply
 
 ## General Rules
 
-- Terraform should always consume an independent client library or sdk which implements the core logic for communicating with the upstream. You should consider moving the `/sdk` to be a separate project.
+- Terraform provider should always consume an independent client library or sdk which implements the core logic for communicating with the upstream. You should consider moving the `/sdk` to be a separate project.
 - Data sources are a special subset of resources which are read-only. They are resolved earlier than regular resources and can be used as part of Terraform's interpolation.
 
 
 ## Versioning
 
-For transparency into our release cycle and in striving to maintain backward compatibility, terraform-provider-example is maintained under the [Semantic Versioning guidelines](https://semver.org/) and release process is predictable and business-friendly.
+For transparency into our release cycle and in striving to maintain backward compatibility, terraform-provider-boilerplate is maintained under the [Semantic Versioning guidelines](https://semver.org/) and release process is predictable and business-friendly.
 
-See the [Releases section of our GitHub project](https://github.com/Clivern/terraform-provider-example/releases) for changelogs for each release version of terraform-provider-example. It contains summaries of the most noteworthy changes made in each release.
+See the [Releases section of our GitHub project](https://github.com/Clivern/terraform-provider-boilerplate/releases) for changelogs for each release version of terraform-provider-boilerplate. It contains summaries of the most noteworthy changes made in each release.
 
 
 ## Bug tracker
 
-If you have any suggestions, bug reports, or annoyances please report them to our issue tracker at https://github.com/Clivern/terraform-provider-example/issues
+If you have any suggestions, bug reports, or annoyances please report them to our issue tracker at https://github.com/Clivern/terraform-provider-boilerplate/issues
 
 
 ## Security Issues
 
-If you discover a security vulnerability within terraform-provider-example, please send an email to [hello@clivern.com](mailto:hello@clivern.com)
+If you discover a security vulnerability within terraform-provider-boilerplate, please send an email to [hello@clivern.com](mailto:hello@clivern.com)
 
 
 ## Contributing
@@ -255,4 +257,4 @@ We are an open source, community-driven project so please feel free to join us. 
 
 © 2019, Clivern. Released under [MIT License](https://opensource.org/licenses/mit-license.php).
 
-**terraform-provider-example** is authored and maintained by [@Clivern](http://github.com/Clivern).
+**terraform-provider-boilerplate** is authored and maintained by [@Clivern](http://github.com/Clivern).

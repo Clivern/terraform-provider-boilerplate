@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 )
 
+// Server struct
 type Server struct {
 	Id     int    `json:"id"`
 	Image  string `json:"image"`

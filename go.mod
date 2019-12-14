@@ -1,4 +1,4 @@
-module github.com/clivern/terraform-provider-example
+module github.com/clivern/terraform-provider-boilerplate
 
 go 1.13
 

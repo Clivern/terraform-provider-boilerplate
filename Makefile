@@ -5,7 +5,7 @@ pkgs          = ./...
 
 help: Makefile
 	@echo
-	@echo " Choose a command run in tfpe:"
+	@echo " Choose a command run in tfpb:"
 	@echo
 	@sed -n 's/^##//p' $< | column -t -s ':' |  sed -e 's/^/ /'
 	@echo
@@ -68,6 +68,12 @@ format:
 vet:
 	@echo ">> ============= Vetting Code ============= <<"
 	$(GO) vet $(pkgs)
+
+
+## build: Build provider
+build:
+	@echo ">> ============= Build provider ============= <<"
+	$(GO) build -o ${ARGS}
 
 
 ## coverage: Create HTML coverage report

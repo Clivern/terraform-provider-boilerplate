@@ -51,5 +51,5 @@ deploy:
   script: curl -sL http://git.io/goreleaser | bash
   on:
     tags: true
-    go: 1.12.x
+    go: 1.13.x
     condition: $TRAVIS_OS_NAME = linux

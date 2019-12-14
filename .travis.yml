@@ -26,7 +26,6 @@ script:
   - export PATH="$PATH:$GOBIN"
   # Fix dir names
   - cd $GOPATH/src/github.com/
-  - ls Clivern
   - mv Clivern clivern
   - cd clivern/terraform-provider-boilerplate
   # Config & execute ci tasks

@@ -10,7 +10,7 @@ import (
 
 // Server struct
 type Server struct {
-	Id     int    `json:"id"`
+	ID     int    `json:"id"`
 	Image  string `json:"image"`
 	Name   string `json:"name"`
 	Size   string `json:"size"`

@@ -5,6 +5,7 @@
 package boilerplate
 
 import (
+	"context"
 	"log"
 	"strconv"
 	"strings"
@@ -58,7 +59,7 @@ func resourceBoilerplateServer() *schema.Resource {
 func resourceBoilerplateServerCreate(d *schema.ResourceData, m interface{}) error {
 	client := m.(*Client).Client
 
-	server, err := client.CreateServer(&sdk.Server{
+	server, err := client.CreateServer(context.Background(), &sdk.Server{
 		Image:  d.Get("image").(string),
 		Name:   d.Get("name").(string),
 		Size:   d.Get("size").(string),
@@ -71,7 +72,7 @@ func resourceBoilerplateServerCreate(d *schema.ResourceData, m interface{}) erro
 		return err
 	}
 
-	d.SetId(strconv.Itoa(server.Id))
+	d.SetId(strconv.Itoa(server.ID))
 	d.Set("name", server.Name)
 	d.Set("size", server.Size)
 	d.Set("image", server.Image)
@@ -90,7 +91,7 @@ func resourceBoilerplateServerRead(d *schema.ResourceData, m interface{}) error 
 		return err
 	}
 
-	server, err := client.GetServer(id)
+	server, err := client.GetServer(context.Background(), id)
 
 	log.Printf("[INFO] Getting Server")
 
@@ -98,7 +99,7 @@ func resourceBoilerplateServerRead(d *schema.ResourceData, m interface{}) error 
 		return err
 	}
 
-	d.SetId(strconv.Itoa(server.Id))
+	d.SetId(strconv.Itoa(server.ID))
 	d.Set("name", server.Name)
 	d.Set("size", server.Size)
 	d.Set("image", server.Image)
@@ -117,8 +118,8 @@ func resourceBoilerplateServerUpdate(d *schema.ResourceData, m interface{}) erro
 		return err
 	}
 
-	server, err := client.UpdateServer(&sdk.Server{
-		Id:     id,
+	server, err := client.UpdateServer(context.Background(), &sdk.Server{
+		ID:     id,
 		Image:  d.Get("image").(string),
 		Name:   d.Get("name").(string),
 		Size:   d.Get("size").(string),
@@ -131,7 +132,7 @@ func resourceBoilerplateServerUpdate(d *schema.ResourceData, m interface{}) erro
 		return err
 	}
 
-	d.SetId(strconv.Itoa(server.Id))
+	d.SetId(strconv.Itoa(server.ID))
 	d.Set("name", server.Name)
 	d.Set("size", server.Size)
 	d.Set("image", server.Image)
@@ -150,7 +151,7 @@ func resourceBoilerplateServerDelete(d *schema.ResourceData, m interface{}) erro
 		return err
 	}
 
-	client.DeleteServer(id)
+	client.DeleteServer(context.Background(), id)
 
 	log.Printf("[INFO] Deleting Server")
 

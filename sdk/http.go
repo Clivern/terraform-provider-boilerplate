@@ -6,6 +6,7 @@ package sdk
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -18,7 +19,7 @@ type HTTP struct {
 }
 
 // Get http call
-func (h *HTTP) Get(endpoint string, parameters map[string]string, headers map[string]string) (*http.Response, error) {
+func (h *HTTP) Get(ctx context.Context, endpoint string, parameters map[string]string, headers map[string]string) (*http.Response, error) {
 
 	endpoint, err := h.BuildParameters(endpoint, parameters)
 
@@ -27,6 +28,8 @@ func (h *HTTP) Get(endpoint string, parameters map[string]string, headers map[st
 	}
 
 	req, _ := http.NewRequest("GET", endpoint, nil)
+
+	req = req.WithContext(ctx)
 
 	for k, v := range headers {
 		req.Header.Add(k, v)
@@ -44,7 +47,7 @@ func (h *HTTP) Get(endpoint string, parameters map[string]string, headers map[st
 }
 
 // Post http call
-func (h *HTTP) Post(endpoint string, data string, parameters map[string]string, headers map[string]string) (*http.Response, error) {
+func (h *HTTP) Post(ctx context.Context, endpoint string, data string, parameters map[string]string, headers map[string]string) (*http.Response, error) {
 
 	endpoint, err := h.BuildParameters(endpoint, parameters)
 
@@ -53,6 +56,8 @@ func (h *HTTP) Post(endpoint string, data string, parameters map[string]string, 
 	}
 
 	req, _ := http.NewRequest("POST", endpoint, bytes.NewBuffer([]byte(data)))
+
+	req = req.WithContext(ctx)
 
 	for k, v := range headers {
 		req.Header.Add(k, v)
@@ -70,7 +75,7 @@ func (h *HTTP) Post(endpoint string, data string, parameters map[string]string, 
 }
 
 // Put http call
-func (h *HTTP) Put(endpoint string, data string, parameters map[string]string, headers map[string]string) (*http.Response, error) {
+func (h *HTTP) Put(ctx context.Context, endpoint string, data string, parameters map[string]string, headers map[string]string) (*http.Response, error) {
 
 	endpoint, err := h.BuildParameters(endpoint, parameters)
 
@@ -79,6 +84,8 @@ func (h *HTTP) Put(endpoint string, data string, parameters map[string]string, h
 	}
 
 	req, _ := http.NewRequest("PUT", endpoint, bytes.NewBuffer([]byte(data)))
+
+	req = req.WithContext(ctx)
 
 	for k, v := range headers {
 		req.Header.Add(k, v)
@@ -96,7 +103,7 @@ func (h *HTTP) Put(endpoint string, data string, parameters map[string]string, h
 }
 
 // Delete http call
-func (h *HTTP) Delete(endpoint string, parameters map[string]string, headers map[string]string) (*http.Response, error) {
+func (h *HTTP) Delete(ctx context.Context, endpoint string, parameters map[string]string, headers map[string]string) (*http.Response, error) {
 
 	endpoint, err := h.BuildParameters(endpoint, parameters)
 
@@ -105,6 +112,8 @@ func (h *HTTP) Delete(endpoint string, parameters map[string]string, headers map
 	}
 
 	req, _ := http.NewRequest("DELETE", endpoint, nil)
+
+	req = req.WithContext(ctx)
 
 	for k, v := range headers {
 		req.Header.Add(k, v)

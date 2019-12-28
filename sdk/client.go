@@ -5,22 +5,25 @@
 package sdk
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
 
+// Client struct
 type Client struct {
 	APIKey     string
 	APIURL     string
 	HTTPClient *HTTP
 }
 
+// Init init http client
 func (c *Client) Init() {
 	c.HTTPClient = &HTTP{}
 }
 
 // CreateServer creates a server
-func (c *Client) CreateServer(server *Server) (*Server, error) {
+func (c *Client) CreateServer(ctx context.Context, server *Server) (*Server, error) {
 	data, err := server.ConvertToJSON()
 
 	if err != nil {
@@ -28,6 +31,7 @@ func (c *Client) CreateServer(server *Server) (*Server, error) {
 	}
 
 	response, err := c.HTTPClient.Post(
+		ctx,
 		fmt.Sprintf("%s/server", c.APIURL),
 		data,
 		map[string]string{},
@@ -56,11 +60,12 @@ func (c *Client) CreateServer(server *Server) (*Server, error) {
 }
 
 // GetServer retrieves a server
-func (c *Client) GetServer(id int) (*Server, error) {
+func (c *Client) GetServer(ctx context.Context, id int) (*Server, error) {
 
 	server := &Server{}
 
 	response, err := c.HTTPClient.Get(
+		ctx,
 		fmt.Sprintf("%s/server/%d", c.APIURL, id),
 		map[string]string{},
 		map[string]string{"X-AUTH-TOKEN": c.APIKey, "Content-Type": "application/json"},
@@ -84,9 +89,10 @@ func (c *Client) GetServer(id int) (*Server, error) {
 }
 
 // DeleteServer deletes a server
-func (c *Client) DeleteServer(id int) (bool, error) {
+func (c *Client) DeleteServer(ctx context.Context, id int) (bool, error) {
 
 	response, err := c.HTTPClient.Delete(
+		ctx,
 		fmt.Sprintf("%s/server/%d", c.APIURL, id),
 		map[string]string{},
 		map[string]string{"X-AUTH-TOKEN": c.APIKey, "Content-Type": "application/json"},
@@ -106,7 +112,7 @@ func (c *Client) DeleteServer(id int) (bool, error) {
 }
 
 // UpdateServer updates a server
-func (c *Client) UpdateServer(server *Server) (*Server, error) {
+func (c *Client) UpdateServer(ctx context.Context, server *Server) (*Server, error) {
 	data, err := server.ConvertToJSON()
 
 	if err != nil {
@@ -114,7 +120,8 @@ func (c *Client) UpdateServer(server *Server) (*Server, error) {
 	}
 
 	response, err := c.HTTPClient.Put(
-		fmt.Sprintf("%s/server/%d", c.APIURL, server.Id),
+		ctx,
+		fmt.Sprintf("%s/server/%d", c.APIURL, server.ID),
 		data,
 		map[string]string{},
 		map[string]string{"X-AUTH-TOKEN": c.APIKey, "Content-Type": "application/json"},

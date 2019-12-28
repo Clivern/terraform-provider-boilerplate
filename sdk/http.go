@@ -27,7 +27,9 @@ func (h *HTTP) Get(ctx context.Context, endpoint string, parameters map[string]s
 		return nil, err
 	}
 
-	req, _ := http.NewRequestWithContext(ctx, "GET", endpoint, nil)
+	req, _ := http.NewRequest("GET", endpoint, nil)
+
+	req = req.WithContext(ctx)
 
 	for k, v := range headers {
 		req.Header.Add(k, v)
@@ -53,7 +55,9 @@ func (h *HTTP) Post(ctx context.Context, endpoint string, data string, parameter
 		return nil, err
 	}
 
-	req, _ := http.NewRequestWithContext(ctx, "POST", endpoint, bytes.NewBuffer([]byte(data)))
+	req, _ := http.NewRequest("POST", endpoint, bytes.NewBuffer([]byte(data)))
+
+	req = req.WithContext(ctx)
 
 	for k, v := range headers {
 		req.Header.Add(k, v)
@@ -79,7 +83,9 @@ func (h *HTTP) Put(ctx context.Context, endpoint string, data string, parameters
 		return nil, err
 	}
 
-	req, _ := http.NewRequestWithContext(ctx, "PUT", endpoint, bytes.NewBuffer([]byte(data)))
+	req, _ := http.NewRequest("PUT", endpoint, bytes.NewBuffer([]byte(data)))
+
+	req = req.WithContext(ctx)
 
 	for k, v := range headers {
 		req.Header.Add(k, v)
@@ -105,7 +111,9 @@ func (h *HTTP) Delete(ctx context.Context, endpoint string, parameters map[strin
 		return nil, err
 	}
 
-	req, _ := http.NewRequestWithContext(ctx, "DELETE", endpoint, nil)
+	req, _ := http.NewRequest("DELETE", endpoint, nil)
+
+	req = req.WithContext(ctx)
 
 	for k, v := range headers {
 		req.Header.Add(k, v)

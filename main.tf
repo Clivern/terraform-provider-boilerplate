@@ -10,7 +10,7 @@ data "boilerplate_image" "image" {
 
 resource "boilerplate_server" "web" {
     name = "web"
-    image = data.boilerplate_image.image.slug
+    image = data.boilerplate_image.image.id
     region = "eu"
     size = "small"
 }

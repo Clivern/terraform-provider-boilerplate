@@ -7,6 +7,7 @@ package boilerplate
 import (
 	"context"
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/clivern/terraform-provider-boilerplate/sdk"
@@ -74,7 +75,6 @@ func dataSourceBoilerplateImageRead(d *schema.ResourceData, meta interface{}) er
 	if err != nil {
 		return err
 	}
-
 
 	d.SetId(strconv.Itoa(image.ID))
 	d.Set("name", image.Name)

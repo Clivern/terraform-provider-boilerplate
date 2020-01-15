@@ -233,6 +233,9 @@ $ terraform plan
 
 # Apply the changes required to reach the desired state of the configuration
 $ terraform apply
+
+# Revert changes
+$ terraform destroy
 ```
 
 

@@ -4,9 +4,14 @@ provider "boilerplate" {
   api_url = "http://127.0.0.1:8080"
 }
 
+data "boilerplate_image" "image" {
+  slug = "UBUNTU_18_04_64BIT"
+}
+
 resource "boilerplate_server" "web" {
     name = "web"
-    image = "ubuntu_18"
+    image = data.boilerplate_image.image.slug
     region = "eu"
     size = "small"
 }
+

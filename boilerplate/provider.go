@@ -25,6 +25,9 @@ func Provider() *schema.Provider {
 				Default:  "api.boilerplate.com",
 			},
 		},
+		DataSourcesMap: map[string]*schema.Resource{
+			"boilerplate_image": dataSourceBoilerplateImage(),
+		},
 		ResourcesMap: map[string]*schema.Resource{
 			"boilerplate_server": resourceBoilerplateServer(),
 		},

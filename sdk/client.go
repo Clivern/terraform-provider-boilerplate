@@ -143,3 +143,32 @@ func (c *Client) UpdateServer(ctx context.Context, server *Server) (*Server, err
 
 	return server, nil
 }
+
+// GetImageBySlug retrieves an image by a slug
+func (c *Client) GetImageBySlug(ctx context.Context, slug string) (*Image, error) {
+
+	image := &Image{}
+
+	response, err := c.HTTPClient.Get(
+		ctx,
+		fmt.Sprintf("%s/image/%s", c.APIURL, slug),
+		map[string]string{},
+		map[string]string{"X-AUTH-TOKEN": c.APIKey, "Content-Type": "application/json"},
+	)
+
+	statusCode := c.HTTPClient.GetStatusCode(response)
+
+	if statusCode != http.StatusOK {
+		return nil, fmt.Errorf("Invalid status code %d", statusCode)
+	}
+
+	responseBody, err := c.HTTPClient.ToString(response)
+
+	if err != nil {
+		return nil, err
+	}
+
+	image.LoadFromJSON([]byte(responseBody))
+
+	return image, nil
+}

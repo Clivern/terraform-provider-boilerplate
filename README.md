@@ -4,8 +4,8 @@
     <p align="center">
         <a href="https://godoc.org/github.com/Clivern/terraform-provider-boilerplate"><img src="https://godoc.org/github.com/Clivern/terraform-provider-boilerplate?status.svg"></a>
         <a href="https://travis-ci.org/Clivern/terraform-provider-boilerplate"><img src="https://travis-ci.org/Clivern/terraform-provider-boilerplate.svg?branch=master"></a>
-        <a href="https://github.com/Clivern/terraform-provider-boilerplate/releases"><img src="https://img.shields.io/badge/Version-0.1.1-red.svg"></a>
-        <a href="https://goreportcard.com/report/github.com/Clivern/terraform-provider-boilerplate"><img src="https://goreportcard.com/badge/github.com/Clivern/terraform-provider-boilerplate?v=0.0.1"></a>
+        <a href="https://github.com/Clivern/terraform-provider-boilerplate/releases"><img src="https://img.shields.io/badge/Version-0.2.0-red.svg"></a>
+        <a href="https://goreportcard.com/report/github.com/Clivern/terraform-provider-boilerplate"><img src="https://goreportcard.com/badge/github.com/Clivern/terraform-provider-boilerplate?v=0.2.0"></a>
         <a href="https://github.com/Clivern/terraform-provider-boilerplate/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
     </p>
 </p>
@@ -19,42 +19,42 @@ First we need to create a simple web service to do a CRUD operations.
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"os"
-	"encoding/json"
-	"io/ioutil"
+    "encoding/json"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+    "os"
 
-	"github.com/gin-gonic/gin"
+    "github.com/gin-gonic/gin"
 )
 
 type Server struct {
-	Id     int    `json:"id"`
-	Image  string `json:"image"`
-	Name   string `json:"name"`
-	Size   string `json:"size"`
-	Region string `json:"region"`
+    Id     int    `json:"id"`
+    Image  string `json:"image"`
+    Name   string `json:"name"`
+    Size   string `json:"size"`
+    Region string `json:"region"`
 }
 
 // LoadFromJSON update object from json
 func (s *Server) LoadFromJSON(data []byte) (bool, error) {
-	err := json.Unmarshal(data, &s)
-	if err != nil {
-		return false, err
-	}
-	return true, nil
+    err := json.Unmarshal(data, &s)
+    if err != nil {
+        return false, err
+    }
+    return true, nil
 }
 
 // ConvertToJSON convert object to json
 func (s *Server) ConvertToJSON() (string, error) {
-	data, err := json.Marshal(&s)
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
+    data, err := json.Marshal(&s)
+    if err != nil {
+        return "", err
+    }
+    return string(data), nil
 }
 
-func Store(file, data string)(bool, error){
+func Store(file, data string) (bool, error) {
     f, err := os.Create(file)
     if err != nil {
         return false, err
@@ -71,7 +71,7 @@ func Store(file, data string)(bool, error){
     return true, nil
 }
 
-func Retrieve(file string) string{
+func Retrieve(file string) string {
     b, err := ioutil.ReadFile(file) // just pass the file name
 
     if err != nil {
@@ -83,118 +83,129 @@ func Retrieve(file string) string{
 
 func main() {
 
-	gin.DisableConsoleColor()
-	gin.DefaultWriter = os.Stdout
+    gin.DisableConsoleColor()
+    gin.DefaultWriter = os.Stdout
 
-	r := gin.Default()
+    r := gin.Default()
 
-	r.GET("/favicon.ico", func(c *gin.Context) {
-		c.String(http.StatusNoContent, "")
-	})
+    r.GET("/favicon.ico", func(c *gin.Context) {
+        c.String(http.StatusNoContent, "")
+    })
 
-	r.GET("/server/:id", func(c *gin.Context) {
-		data := Retrieve("db.txt")
+    r.GET("/server/:id", func(c *gin.Context) {
+        data := Retrieve("db.txt")
 
-		if data == ""{
-			c.JSON(http.StatusNotFound, gin.H{
-				"status": "error",
-				"error":  "Server not found",
-			})
-			return
-		}
+        if data == "" {
+            c.JSON(http.StatusNotFound, gin.H{
+                "status": "error",
+                "error":  "Server not found",
+            })
+            return
+        }
 
-		server := &Server{}
-		server.LoadFromJSON([]byte(data))
+        server := &Server{}
+        server.LoadFromJSON([]byte(data))
 
-		c.JSON(http.StatusOK, gin.H{
-			"id": server.Id,
-			"image": server.Image,
-			"name": server.Name,
-			"size": server.Size,
-			"region": server.Region,
-		})
-	})
+        c.JSON(http.StatusOK, gin.H{
+            "id":     server.Id,
+            "image":  server.Image,
+            "name":   server.Name,
+            "size":   server.Size,
+            "region": server.Region,
+        })
+    })
 
-	r.POST("/server", func(c *gin.Context) {
-		rawBody, err := c.GetRawData()
+    r.POST("/server", func(c *gin.Context) {
+        rawBody, err := c.GetRawData()
 
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"status": "error",
-				"error":  "Invalid request",
-			})
-			return
-		}
+        if err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{
+                "status": "error",
+                "error":  "Invalid request",
+            })
+            return
+        }
 
-		server := &Server{}
-		server.LoadFromJSON([]byte(rawBody))
+        server := &Server{}
+        server.LoadFromJSON([]byte(rawBody))
 
-		server.Id = 1
+        server.Id = 1
 
-		data, _ := server.ConvertToJSON()
+        data, _ := server.ConvertToJSON()
 
-		ok, err := Store("db.txt", data)
+        ok, err := Store("db.txt", data)
 
-		if !ok || err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"status": "error",
-				"error":  "Internal Server Error",
-			})
-			return
-		}
+        if !ok || err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{
+                "status": "error",
+                "error":  "Internal Server Error",
+            })
+            return
+        }
 
-		c.JSON(http.StatusOK, gin.H{
-			"id": server.Id,
-			"image": server.Image,
-			"name": server.Name,
-			"size": server.Size,
-			"region": server.Region,
-		})
-	})
+        c.JSON(http.StatusOK, gin.H{
+            "id":     server.Id,
+            "image":  server.Image,
+            "name":   server.Name,
+            "size":   server.Size,
+            "region": server.Region,
+        })
+    })
 
-	r.PUT("/server/:id", func(c *gin.Context) {
-		rawBody, err := c.GetRawData()
+    r.PUT("/server/:id", func(c *gin.Context) {
+        rawBody, err := c.GetRawData()
 
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"status": "error",
-				"error":  "Invalid request",
-			})
-			return
-		}
+        if err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{
+                "status": "error",
+                "error":  "Invalid request",
+            })
+            return
+        }
 
-		server := &Server{}
-		server.LoadFromJSON([]byte(rawBody))
+        server := &Server{}
+        server.LoadFromJSON([]byte(rawBody))
 
-		server.Id = 1
+        server.Id = 1
 
-		data, _ := server.ConvertToJSON()
+        data, _ := server.ConvertToJSON()
 
-		ok, err := Store("db.txt", data)
+        ok, err := Store("db.txt", data)
 
-		if !ok || err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"status": "error",
-				"error":  "Internal Server Error",
-			})
-			return
-		}
+        if !ok || err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{
+                "status": "error",
+                "error":  "Internal Server Error",
+            })
+            return
+        }
 
-		c.JSON(http.StatusOK, gin.H{
-			"id": server.Id,
-			"image": server.Image,
-			"name": server.Name,
-			"size": server.Size,
-			"region": server.Region,
-		})
-	})
+        c.JSON(http.StatusOK, gin.H{
+            "id":     server.Id,
+            "image":  server.Image,
+            "name":   server.Name,
+            "size":   server.Size,
+            "region": server.Region,
+        })
+    })
 
-	r.DELETE("/server/:id", func(c *gin.Context) {
-		Store("db.txt", "")
-		c.Status(http.StatusNoContent)
-	})
+    r.DELETE("/server/:id", func(c *gin.Context) {
+        Store("db.txt", "")
+        c.Status(http.StatusNoContent)
+    })
 
-	r.Run(fmt.Sprintf(":%d", 8080))
+    r.GET("/image/:slug", func(c *gin.Context) {
+        c.JSON(http.StatusOK, gin.H{
+            "id":            1,
+            "slug":          "UBUNTU_18_04_64BIT",
+            "name":          "UBUNTU 18.04 64BIT",
+            "distribution":  "UBUNTU",
+            "private":       false,
+            "min_disk_size": 20,
+        })
+    })
+
+    r.Run(fmt.Sprintf(":%d", 8080))
 }
 ```
 

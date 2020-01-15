@@ -10,7 +10,6 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/clivern/terraform-provider-boilerplate/sdk"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
@@ -20,24 +19,17 @@ func dataSourceBoilerplateImage() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceBoilerplateImageRead,
 		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Description:   "name of the image",
-				ValidateFunc:  validation.NoZeroValues,
-				ConflictsWith: []string{"slug"},
-			},
 			"slug": {
 				Type:         schema.TypeString,
-				Optional:     true,
+				Required:     true,
 				Description:  "slug of the image",
 				ValidateFunc: validation.NoZeroValues,
 			},
-			// computed attributes
-			"image": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "slug or id of the image",
+			"name": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Description:  "name of the image",
+				ValidateFunc: validation.NoZeroValues,
 			},
 			"distribution": {
 				Type:        schema.TypeString,
@@ -59,7 +51,7 @@ func dataSourceBoilerplateImage() *schema.Resource {
 }
 
 // dataSourceBoilerplateImageRead retrieves an image
-func dataSourceBoilerplateImageRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceBoilerplateImageRead(d *schema.ResourceData, m interface{}) error {
 	client := m.(*Client).Client
 
 	slug, hasSlug := d.GetOk("slug")
@@ -68,9 +60,9 @@ func dataSourceBoilerplateImageRead(d *schema.ResourceData, meta interface{}) er
 		return fmt.Errorf("`slug` must be assigned")
 	}
 
-	image, err := client.GetImage(context.Background(), slug)
+	image, err := client.GetImageBySlug(context.Background(), slug.(string))
 
-	log.Printf("[INFO] Getting Image")
+	log.Printf("[INFO] Getting Image By Slug")
 
 	if err != nil {
 		return err
@@ -79,10 +71,9 @@ func dataSourceBoilerplateImageRead(d *schema.ResourceData, meta interface{}) er
 	d.SetId(strconv.Itoa(image.ID))
 	d.Set("name", image.Name)
 	d.Set("slug", image.Slug)
-	d.Set("image", strconv.Itoa(image.ID))
 	d.Set("distribution", image.Distribution)
 	d.Set("min_disk_size", image.MinDiskSize)
-	d.Set("private", !image.Public)
+	d.Set("private", image.Private)
 
 	return nil
 }

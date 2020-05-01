@@ -88,6 +88,35 @@ func (c *Client) GetServer(ctx context.Context, id int) (*Server, error) {
 	return server, nil
 }
 
+// GetServerByName retrieves a server by name
+func (c *Client) GetServerByName(ctx context.Context, name string) (*Server, error) {
+
+	server := &Server{}
+
+	response, err := c.HTTPClient.Get(
+		ctx,
+		fmt.Sprintf("%s/server/%s", c.APIURL, name),
+		map[string]string{},
+		map[string]string{"X-AUTH-TOKEN": c.APIKey, "Content-Type": "application/json"},
+	)
+
+	statusCode := c.HTTPClient.GetStatusCode(response)
+
+	if statusCode != http.StatusOK {
+		return nil, fmt.Errorf("Invalid status code %d", statusCode)
+	}
+
+	responseBody, err := c.HTTPClient.ToString(response)
+
+	if err != nil {
+		return nil, err
+	}
+
+	server.LoadFromJSON([]byte(responseBody))
+
+	return server, nil
+}
+
 // DeleteServer deletes a server
 func (c *Client) DeleteServer(ctx context.Context, id int) (bool, error) {
 

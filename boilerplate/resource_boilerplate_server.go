@@ -85,17 +85,19 @@ func resourceBoilerplateServerCreate(d *schema.ResourceData, m interface{}) erro
 func resourceBoilerplateServerRead(d *schema.ResourceData, m interface{}) error {
 	client := m.(*Client).Client
 
-	id, err := strconv.Atoi(d.Id())
+	serverName := d.Get("name").(string)
 
-	if err != nil {
-		return err
-	}
-
-	server, err := client.GetServer(context.Background(), id)
+	server, err := client.GetServerByName(context.Background(), serverName)
 
 	log.Printf("[INFO] Getting Server")
 
 	if err != nil {
+		// If server not found
+		if strings.Contains(err.Error(), "404") {
+			d.SetId("")
+			return nil
+		}
+
 		return err
 	}
 

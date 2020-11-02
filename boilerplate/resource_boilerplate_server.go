@@ -11,8 +11,8 @@ import (
 	"strings"
 
 	"github.com/clivern/terraform-provider-boilerplate/sdk"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 // resourceBoilerplateServer defines a server schema
